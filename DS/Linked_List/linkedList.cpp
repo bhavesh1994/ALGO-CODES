@@ -136,6 +136,60 @@ int findMiddleElement(Node* node){
 	return slow->data;
 }
 
+Node* evenOddSegregation(Node* node){
+	Node* curr = node;
+	Node* end = node;
+	Node* prev = NULL;
+	node = NULL;
+	if(curr==NULL){
+		return node;
+	}
+
+	while(end->next != NULL){
+		end = end->next;
+	}
+	Node* new_start = NULL;
+	Node* new_end = NULL;
+	while(curr !=NULL){
+		cout<<"curr "<<curr->data<<endl;
+		if(curr->data%2!=0){
+			Node* temp = curr->next;
+			if(new_start==NULL){
+				new_start= curr;
+				new_end = curr;
+				new_end->next=NULL;
+			}
+			else{
+				new_end->next = curr;
+				new_end->next->next = NULL;
+			}
+			if(prev!=NULL){
+				prev->next = temp;
+			}
+			curr = temp;
+		}
+		else{
+			if(node==NULL){
+				node = curr;
+			}
+			prev=curr;
+			curr = curr->next;
+		}
+	}
+	if(new_start==NULL){
+		return curr;
+	}
+	else if(curr==NULL){
+		return new_start;
+	}
+	else{
+		end->next = new_start;
+		return node;
+	}
+
+
+}
+
 int main(){
 
 	Node* head = new Node(1);
@@ -185,5 +239,21 @@ int main(){
 
 	// get middle Node of LL
 	cout<<"middle Node of LL: "<<findMiddleElement(head)<<endl;
+	traverseLinkedList(head);
+	cout<<"Even odd segregation: "<<endl;
+	head = evenOddSegregation(head);
+	traverseLinkedList(head);
 
+	Node* head1 = new Node(1);
+	Node* secondNode2 = new Node(5); 
+	Node* thirdNode2 = new Node(3);
+
+	head1->next = secondNode2;
+	secondNode2->next = thirdNode2;
+	thirdNode2->next = NULL;
+
+	traverseLinkedList(head1);
+	cout<<"Even odd segregation: "<<endl;
+	head1 = evenOddSegregation(head1);
+	traverseLinkedList(head1);
 }
