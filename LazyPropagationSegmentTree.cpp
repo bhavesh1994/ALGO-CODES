@@ -2,7 +2,8 @@
 using namespace std;
 
 // Segmet tree for sum over a range of an array
-	
+
+int lazy[14];
 int segtree[14];
 int arr[7];
 void build(int node, int start, int end){
@@ -22,11 +23,26 @@ void build(int node, int start, int end){
 	}
 }
 
-void update(int node, int start, int end, int idx, int val){
-	if(start == end){
-		cout<<"node"<<" "<<node<<endl;
-		arr[ idx ] = val;
-		segtree[node] = val;
+void update(int node, int start, int end, int l, int r, int val){
+	if(lazy[node] != 0){
+		segtree[node] += (end - start) * lazy[node];
+		if(start != end){
+			lazy[2*node] += lazy[node];
+			lazy[2*node + 1] += lazy[node];
+		}
+		lazy[node] = 0;
+	}
+
+	if(start > r || end <l){
+		return 0 ;
+	}
+
+	if(l<= start && end <= r){
+		segtree[node] += (end - start + 1) * val; 
+		if(start != end){
+			lazy[2*node] += val;
+			lazy[2*node + 1] += val;
+		}
 	}
 	else{
 		int mid = (start + end ) / 2;
@@ -42,6 +58,15 @@ void update(int node, int start, int end, int idx, int val){
 
 int query(int node, int start, int end, int l, int r){
 	
+	if(lazy[node] != 0){
+		segtree[node] += (end - start) * lazy[node];
+		if(start != end){
+			lazy[2*node] += lazy[node];
+			lazy[2*node + 1] += lazy[node];
+		}
+		lazy[node] = 0;
+	}
+
 	if(start > r || end <l){
 		return 0 ;
 	}
